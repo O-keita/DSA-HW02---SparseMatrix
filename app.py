@@ -1,5 +1,19 @@
 class SparseMatrix:
+    """ 
+        The sparse matrix class will contain all
+        my functions: load_matrix(), add(), subract(), multiply(),
+        divide()
+    
+    """
     def __init__(self, matrixFilePath=None, numRows=None, numCols=None):
+        """if a file path is passed, 
+            we will load the file in 
+            load_matrix function
+
+            else:
+            we will just set the rows and col
+            args passed in
+        """
         if matrixFilePath:
             self.load_from_file(matrixFilePath)
         else:
@@ -8,6 +22,12 @@ class SparseMatrix:
             self.values = {}
 
     def load_from_file(self, matrixFilePath):
+        """
+            We will read our input files
+            and set our number of rows and cols
+            we will then set parse the row, col and value
+            of each matrix
+        """
         self.values = {}
         with open(matrixFilePath, 'r') as f:
             lines = f.readlines()
@@ -23,6 +43,14 @@ class SparseMatrix:
                         raise ValueError("Input file has wrong format")
 
     def parse_entry(self, line):
+
+        """
+            Here we check if the file fromat is like:
+            (0, kk, kk) i.e starts and end with parenthesis
+            and have three entries
+            So we will just extract those three entries,
+        """
+
         if not line.startswith('(') or not line.endswith(')'):
             raise ValueError("Input file has wrong format")
         parts = line[1:-1].split(',')
@@ -37,6 +65,11 @@ class SparseMatrix:
         return row, col, value
 
     def get_element(self, currRow, currCol):
+        """This fuction will retrieve the value of the matrix 
+        col and row passed into to:
+
+        by default zero is the value if col or row not found
+        """
         return self.values.get((currRow, currCol), 0)
 
     def set_element(self, currRow, currCol, value):
@@ -68,6 +101,13 @@ class SparseMatrix:
         return result
 
     def multiply(self, other):
+        """
+            multiply two sparse matrix
+            args:
+                other 
+                matrixFilePath
+
+        """
         if self.numCols != other.numRows:
             raise ValueError("Matrix dimensions must agree for multiplication.")
         result = SparseMatrix(numRows=self.numRows, numCols=other.numCols)
